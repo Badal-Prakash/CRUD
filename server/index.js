@@ -1,14 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 const cors = require("cors");
 const User = require("./model/userModel");
+dotenv.config({ path: "./config.env" });
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017").then(() => {
-  console.log("database connected");
-});
+const DB = process.env.DATABASE_URL;
+mongoose
+  .connect(DB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("database connected");
+  });
 
 app.get("/", async (req, res) => {
   try {
