@@ -4,14 +4,16 @@ import { Link } from "react-router-dom";
 
 function Users() {
   const [users, setUsers] = useState([]);
+
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:3000/")
+      .get("http://127.0.0.1:3000/users")
       .then((res) => setUsers(res.data["users"]))
       .catch((err) => {
         console.log(err.message);
       });
   }, []);
+  console.log(users);
   const handleClick = (id) => {
     axios
       .delete("http://127.0.0.1:3000/user/" + id)

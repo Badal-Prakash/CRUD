@@ -7,15 +7,16 @@ dotenv.config({ path: "./config.env" });
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+app.use(express.static(__dirname + "/client/dist"));
 const DB = process.env.DATABASE_URL;
+const DB_LOCAL = "mongodb://localhost:27017/users";
 mongoose
-  .connect(DB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(DB_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("database connected");
   });
 
-app.get("/", async (req, res) => {
+app.get("/users", async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json({
@@ -72,6 +73,9 @@ app.delete("/user/:id", async (req, res) => {
   }
 });
 
+app.get("*", async (req, res) => {
+  res.sendFile(__dirname + "/client/dist/index.html");
+});
 const port = 3000;
 app.listen(port, () => {
   console.log(`listening on ${port}`);
