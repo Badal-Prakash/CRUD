@@ -1,17 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const path = require("path");
 const cors = require("cors");
 const User = require("./model/userModel");
+const { Db } = require("mongodb");
 dotenv.config({ path: "./config.env" });
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(`__dirname` + "/client/dist"));
+
 const DB = process.env.DATABASE_URL;
 const DB_LOCAL = "mongodb://localhost:27017/users";
+const __dirname1 = path.resolve();
 mongoose
-  .connect(DB_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(DB, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("database connected");
   });
@@ -73,8 +76,9 @@ app.delete("/user/:id", async (req, res) => {
   }
 });
 
+app.use(express.static(path.join(__dirname1, "/client/dist")));
 app.get("*", async (req, res) => {
-  res.sendFile(__dirname + "/client/dist/index.html");
+  res.sendFile(__dirname1 + "/client/dist/index.html");
 });
 const port = 3000;
 app.listen(port, () => {
