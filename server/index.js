@@ -7,7 +7,7 @@ dotenv.config({ path: "./config.env" });
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname + "/client/dist"));
+app.use(express.static(`__dirname` + "/client/dist"));
 const DB = process.env.DATABASE_URL;
 const DB_LOCAL = "mongodb://localhost:27017/users";
 mongoose
